@@ -1,15 +1,21 @@
 package com.example.memory_game;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -51,45 +57,100 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    public void flashButton(Button b){
+        Handler handler = new Handler();
+        handler.postDelayed(() -> flash_button(b),1000);
+        handler.postDelayed(() -> flash_back(b),2000);
+    }
+
+
+    public void generateRandom(View v){
+        Random rand = new Random();
+        int num = rand.nextInt(9)+1;
+        sequence.add(num);
+        switch (num) {
+            case 1:
+                flashButton(findViewById(R.id.button11));
+                break;
+            case 2:
+                flashButton(findViewById(R.id.button21));
+                break;
+            case 3:
+                flashButton(findViewById(R.id.button31));
+                break;
+            case 4:
+                flashButton(findViewById(R.id.button12));
+                break;
+            case 5:
+                flashButton(findViewById(R.id.button22));
+                break;
+            case 6:
+                flashButton(findViewById(R.id.button32));
+                break;
+            case 7:
+                flashButton(findViewById(R.id.button13));
+                break;
+            case 8:
+                flashButton(findViewById(R.id.button23));
+                break;
+            case 9:
+                flashButton(findViewById(R.id.button33));
+                break;
+        }
+    }
+
+    public void generateSequenceTest(View v){
+        sequence.clear();
+        Handler handler = new Handler();
+        for (int i = 0; i < seqLenth; i++) {
+            handler.postDelayed(() -> generateRandom(v), 1000*i);
+        }
+        printSequence(v);
+    }
+
+    public void printSequence(View v){
+        TextView t = findViewById(R.id.textView8);
+        t.setText(sequence.toString());
+    }
+
     public void generateSequence(View v){
         Random rand = new Random();
-        sequence.clear();
+        //sequence.clear();
         for (int i = 0; i < seqLenth; i++){
+
             int num = rand.nextInt(9)+1;
             sequence.add(num);
              switch (num) {
                 case 1:
-                    flash_button(findViewById(R.id.button11));
+                    flashButton(findViewById(R.id.button11));
                     break;
                 case 2:
-                    flash_button(findViewById(R.id.button21));
+                    flashButton(findViewById(R.id.button21));
                     break;
                 case 3:
-                    flash_button(findViewById(R.id.button31));
+                    flashButton(findViewById(R.id.button31));
                     break;
                 case 4:
-                    flash_button(findViewById(R.id.button12));
+                    flashButton(findViewById(R.id.button12));
                     break;
                 case 5:
-                    flash_button(findViewById(R.id.button22));
+                    flashButton(findViewById(R.id.button22));
                     break;
                 case 6:
-                    flash_button(findViewById(R.id.button32));
+                    flashButton(findViewById(R.id.button32));
                     break;
                 case 7:
-                    flash_button(findViewById(R.id.button13));
+                    flashButton(findViewById(R.id.button13));
                     break;
                 case 8:
-                    flash_button(findViewById(R.id.button23));
+                    flashButton(findViewById(R.id.button23));
                     break;
                 case 9:
-                    flash_button(findViewById(R.id.button33));
+                    flashButton(findViewById(R.id.button33));
                     break;
             }
-
-
-
         }
+
         TextView t = findViewById(R.id.textView8);
         t.setText(sequence.toString());
 
@@ -98,14 +159,25 @@ public class GameActivity extends AppCompatActivity {
 
     public void flash_button(Button b){
         b.setBackgroundColor(getResources().getColor(R.color.teal_200));
+    }
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                b.setBackgroundColor(getResources().getColor(R.color.purple_500));}
-        }, 2000);
+    public void flash_back(Button b){
+        b.setBackgroundColor(getResources().getColor(R.color.purple_500));
 
+    }
 
+    public void evaluate(View v){
+        TextView t = findViewById(R.id.textView8);
+        Boolean eq = true;
+
+        if (sequence.equals(pressedButtons)){
+            t.setText("Jipikaei");
+        } else {
+            t.setText("You are failure");
+        }
+
+        sequence.clear();
+        pressedButtons.clear();
     }
 
 
