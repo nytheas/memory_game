@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,7 +27,8 @@ public class GameActivity extends AppCompatActivity {
     List pressedButtons = new ArrayList();
     List sequence = new ArrayList();
 
-    Integer seqLenth = 7;
+    Integer seqLength = 3;
+    Integer lives = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
     public void generateSequenceTest(View v){
         sequence.clear();
         Handler handler = new Handler();
-        for (int i = 0; i < seqLenth; i++) {
+        for (int i = 0; i < seqLength; i++) {
             handler.postDelayed(() -> generateRandom(v), 1000*i);
         }
         printSequence(v);
@@ -116,7 +118,7 @@ public class GameActivity extends AppCompatActivity {
     public void generateSequence(View v){
         Random rand = new Random();
         //sequence.clear();
-        for (int i = 0; i < seqLenth; i++){
+        for (int i = 0; i < seqLength; i++){
 
             int num = rand.nextInt(9)+1;
             sequence.add(num);
@@ -168,17 +170,57 @@ public class GameActivity extends AppCompatActivity {
 
     public void evaluate(View v){
         TextView t = findViewById(R.id.textView8);
-        Boolean eq = true;
 
-        if (sequence.equals(pressedButtons)){
-            t.setText("Jipikaei");
+        Boolean same = compare_array(sequence,pressedButtons);
+
+        if (same){
+            t.setText("Jip ika ei");
+            seqLength++;
         } else {
             t.setText("You are failure");
+            lives--;
         }
-
+        //Log.d("compare", "got here"+ same);
         sequence.clear();
         pressedButtons.clear();
     }
 
+    public Boolean compare_array(List array1, List array2){
+        int len1 = array1.size();
+        int len2 = array2.size();
+
+
+        Log.d("compare", "here1");
+
+        if (len1 != len2){
+            Log.d("compare", "here2");
+            return Boolean.FALSE;
+        }
+
+        for (int i = 0; i < len1; i++){
+            Log.d("compare", "here3");
+            int ac1 = (int) array1.get(i);
+            //int ac2 = (int) array1.get(i);
+            String ac3 = (String) array2.get(i);
+            int ac2 = Integer.valueOf(ac3);
+            //Log.d("compare", "string?: "+ac3);
+            if (ac1 != ac2) {
+                Log.d("compare", "compare_FAIL: "+ ac1+"|"+ac2);
+                return Boolean.FALSE;
+            } else {
+                Log.d("compare", "compare_SUCCESS: "+ ac1+"|"+ac2);
+            }
+        }
+        return Boolean.TRUE;
+    }
+
+
+    public void printMenu(View v){
+        TextView t = findViewById(R.id.textView10);
+        t.setText("Sequence length:"+String.valueOf(seqLength));
+        TextView t2 = findViewById(R.id.textView11);
+        t2.setText("Lives remaining:"+String.valueOf(lives));
+
+    }
 
 }
