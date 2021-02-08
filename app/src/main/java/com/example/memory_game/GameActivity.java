@@ -37,6 +37,8 @@ public class GameActivity extends AppCompatActivity {
 
     Integer seqLength = 3;
     Integer lives = 3;
+    Integer status = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,8 @@ public class GameActivity extends AppCompatActivity {
         Integer s = v.getId();
         String b = ((Button)v).getText().toString();
         pressedButtons.add(b);
-        TextView t = findViewById(R.id.textView8);
-        t.setText(pressedButtons.toString());
+        //TextView t = findViewById(R.id.textView8);
+        //t.setText(pressedButtons.toString());
         v.setBackgroundColor(getResources().getColor(R.color.teal_200));
 
         new Timer().schedule(new TimerTask() {
@@ -124,13 +126,33 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void gameRound(View v){
-        generateSequenceTest(v);
+        Button b = findViewById(R.id.button9);
+        if (status == 0) {
+            // generate sequence
+            b.setText("Evaluate");
+            generateSequenceTest(v);
+            status = 1;
+        }
+        else if (status == 1) {
+            // check sequence
+            status = 0;
+            evaluate(v);
+            b.setText("Next round");
+
+        }
+        if (status == 2) {
+            b.setText("Exit to menu");
+            status = 3;
+        }
+        else if (status == 3) {
+            finish();
+        }
      }
 
 
     public void printSequence(View v){
         TextView t = findViewById(R.id.textView8);
-        t.setText(sequence.toString());
+        // t.setText(sequence.toString());
     }
 
     public void generateSequence(View v){
@@ -192,19 +214,20 @@ public class GameActivity extends AppCompatActivity {
         Boolean same = compare_array(sequence,pressedButtons);
 
         if (same){
-            t.setText("Jip ika ei");
+            t.setText("Correct!");
             seqLength++;
         } else {
-            t.setText("You are failure");
+            t.setText("Wrong! Try again!");
             lives--;
         }
 
         if (lives == 0) {
             saveHighScore();
-            t.setText("You are dead");
+            t.setText("You are dead. Your score is " + String.valueOf(seqLength));
+            status = 2;
  
         }
-
+        printMenu(v);
         //Log.d("compare", "got here"+ same);
         sequence.clear();
         pressedButtons.clear();
@@ -261,8 +284,8 @@ public class GameActivity extends AppCompatActivity {
     public void loadHighScore(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         high_score = sharedPreferences.getInt(HIGH_SCORE,0);
-        TextView t = findViewById(R.id.textView12);
-        t.setText("High score: "+String.valueOf(high_score));
+        // TextView t = findViewById(R.id.textView12);
+        // t.setText("High score: "+String.valueOf(high_score));
 
         }
 

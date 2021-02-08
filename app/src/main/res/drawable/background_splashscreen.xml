@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/purple_200">
+    </item>
+
+    <item>
+        <bitmap android:src="@drawable/thinking2"
+            android:gravity="center"/>
+
+    </item>
+    <!-- <div>Icons made by <a href="https://smashicons.com/" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
+
+
+
+
+</layer-list>
