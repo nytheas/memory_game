@@ -4,6 +4,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -24,6 +25,13 @@ import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
 
+    public static final String SHARED_PREFS = "SharedPrefs";
+    public static final String HIGH_SCORE = "High score";
+    private Integer high_score;
+
+
+
+
     List pressedButtons = new ArrayList();
     List sequence = new ArrayList();
 
@@ -34,7 +42,12 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-    }
+        loadHighScore();
+        TextView t = findViewById(R.id.textView10);
+        t.setText("Sequence length:"+String.valueOf(seqLength));
+        TextView t2 = findViewById(R.id.textView11);
+        t2.setText("Lives remaining:"+String.valueOf(lives));    }
+
 
     public void pressButton(View v){
         Integer s = v.getId();
@@ -110,6 +123,11 @@ public class GameActivity extends AppCompatActivity {
         printSequence(v);
     }
 
+    public void gameRound(View v){
+        generateSequenceTest(v);
+     }
+
+
     public void printSequence(View v){
         TextView t = findViewById(R.id.textView8);
         t.setText(sequence.toString());
@@ -180,6 +198,13 @@ public class GameActivity extends AppCompatActivity {
             t.setText("You are failure");
             lives--;
         }
+
+        if (lives == 0) {
+            saveHighScore();
+            t.setText("You are dead");
+ 
+        }
+
         //Log.d("compare", "got here"+ same);
         sequence.clear();
         pressedButtons.clear();
@@ -222,5 +247,24 @@ public class GameActivity extends AppCompatActivity {
         t2.setText("Lives remaining:"+String.valueOf(lives));
 
     }
+
+    public void saveHighScore(){
+        if (seqLength > high_score) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(HIGH_SCORE, seqLength);
+            editor.apply();
+        }
+
+    }
+
+    public void loadHighScore(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        high_score = sharedPreferences.getInt(HIGH_SCORE,0);
+        TextView t = findViewById(R.id.textView12);
+        t.setText("High score: "+String.valueOf(high_score));
+
+        }
+
 
 }
