@@ -1,34 +1,24 @@
 package com.example.memory_game;
 
 public class post {
-    private int userId;
+    private String name;
 
-    private Integer id;
+    private Integer score;
 
-    private String title;
 
-    private String body;
 
-    public post(int userId, Integer id,  String title, String body) {
-        this.userId = userId;
-        this.id = id;
-        this.title = title;
-        this.body = body;
+    public post(String name, Integer score ) {
+        this.name = name;
+        this.score = score;
+
     }
 
-    public int getUserId() {
-        return userId;
+    public String getName() {
+        return name;
     }
 
-    public int getId() {
-        return id;
+    public Integer getScore() {
+        return score;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBody() {
-        return body;
-    }
 }

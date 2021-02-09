@@ -11,7 +11,7 @@ def index():
    global all_values
    if (request.method == 'POST'):
       some_json = request.get_json()
-      print(some_json)
+      all_values = add_new(all_values,some_json)
       return jsonify(some_json),201
    else:
       pass

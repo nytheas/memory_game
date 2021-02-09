@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void createPost(){
-        post post = new post(23, 1, "test","test2");
+        post post = new post("myself",6);
 
 
         Call<post> call = jsonPlaceholderApi.createPost(post);
@@ -53,10 +53,10 @@ public class SettingsActivity extends AppCompatActivity {
 
 
                 String content = "";
-                content += "ID:" + posts.getId() + "\n";
-                content += "User ID: " + posts.getUserId() + "\n";
-                content += "Title: " + posts.getTitle() + "\n";
-                content += "body: " + posts.getBody() + "\n\n";
+                content += "SENT:";
+                content += "ID:" + posts.getName() + "        ";
+                content += "User ID: " + posts.getScore() + "\n";
+
                 textViewResult.append(content);
 
 
@@ -82,13 +82,16 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 textViewResult.setText("");
                 List<post> posts = response.body();
+                int i;
+                i = 1;
                 for (post post : posts) {
                     String content = "";
-                    content += "ID:" + post.getId() + "\n";
-                    content += "User ID: " + post.getUserId() + "\n";
-                    content += "Title: " + post.getTitle() + "\n";
-                    content += "body: " + post.getBody() + "\n\n";
+                    content += "poradi: " + i +".        ";
+                    content += "name: " + post.getName() + "        ";
+                    content += "score: " + post.getScore() + "\n";
+
                     textViewResult.append(content);
+                    i++;
                 }
 
 
