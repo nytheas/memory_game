@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -163,6 +165,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void gameRound(View v){
         Button b = findViewById(R.id.button9);
+        TextView tv = findViewById(R.id.textView8);
+        tv.setText("");
         if (status == 0) {
             // generate sequence
             b.setText("Evaluate");
@@ -341,7 +345,7 @@ public class GameActivity extends AppCompatActivity {
                     return;
                 }
                 textViewResult.setText("");
-                post posts = response.body();
+                /*post posts = response.body();
 
                 String content = "";
                 content += "SENT to HIGHSCORE:";
@@ -349,7 +353,7 @@ public class GameActivity extends AppCompatActivity {
                 content += "score: " + posts.getScore() + "\n";
 
                 textViewResult.append(content);
-
+                */
 
             }
 

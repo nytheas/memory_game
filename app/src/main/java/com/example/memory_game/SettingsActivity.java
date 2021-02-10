@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SettingsActivity extends AppCompatActivity {
     private TextView textViewResult;
+    private TextView textViewResultName;
+    private TextView textViewResultScore;
     private JsonPlaceholderApi jsonPlaceholderApi;
 
     public static final String SHARED_PREFS = "SharedPrefs";
@@ -45,7 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         textViewResult = findViewById(R.id.textView6);
-
+        textViewResultName = findViewById(R.id.textView7);
+        textViewResultScore = findViewById(R.id.textView9);
         Retrofit retrofit = new Retrofit.Builder()
                 //.baseUrl("http://jsonplaceholder.typicode.com/")
                 .baseUrl("http://10.0.2.2:5000/")
@@ -104,17 +108,25 @@ public class SettingsActivity extends AppCompatActivity {
                     return;
 
                 }
-                textViewResult.setText("");
+                textViewResult.setText("poradi\n");
+                textViewResultName.setText("jmeno\n");
+                textViewResultScore.setText("score\n");
                 List<post> posts = response.body();
                 int i;
                 i = 1;
+
                 for (post post : posts) {
                     String content = "";
-                    content += "poradi: " + i +".        ";
-                    content += "name: " + post.getName() + "        ";
-                    content += "score: " + post.getScore() + "\n";
+                    String contentName = "";
+                    String contentScore = "";
+
+                    content += i + ".\n";
+                    contentName += post.getName() + "\n";
+                    contentScore += post.getScore() + "\n";
 
                     textViewResult.append(content);
+                    textViewResultName.append(contentName);
+                    textViewResultScore.append(contentScore);
                     i++;
                 }
 
@@ -139,21 +151,16 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void getLocalHighscore(){
-        textViewResult.setText("");
+        textViewResult.setText("poradi\n");
+        textViewResultName.setText("jmeno\n");
+        textViewResultScore.setText("score\n");
+
         load_values();
 
-        String content = "";
-        content += "poradi: " + "1" +".        ";
-        content += "name: " + name1 + "        ";
-        content += "score: " + score1 + "\n";
-        content += "poradi: " + "2" +".        ";
-        content += "name: " + name2 + "        ";
-        content += "score: " + score2 + "\n";
-        content += "poradi: " + "3" +".        ";
-        content += "name: " + name3 + "        ";
-        content += "score: " + score3 + "\n";
+        textViewResult.append("1.\n2.\n3.");
+        textViewResultName.append(name1 + "\n" + name2 + "\n" + name3);
+        textViewResultScore.append(score1 + "\n" + score2 + "\n" + score3);
 
-        textViewResult.append(content);
 
     }
 
