@@ -23,11 +23,22 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class GameActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFS = "SharedPrefs";
     public static final String HIGH_SCORE = "High score";
+    public static final String NAME = "Name";
+    private String my_name;
     private Integer high_score;
+    private TextView textViewResult;
+    private JsonPlaceholderApi jsonPlaceholderApi;
+
 
 
 
@@ -46,9 +57,20 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         loadHighScore();
         TextView t = findViewById(R.id.textView10);
-        t.setText("Sequence length:"+String.valueOf(seqLength));
+        t.setText("Sequence length:" + String.valueOf(seqLength));
         TextView t2 = findViewById(R.id.textView11);
-        t2.setText("Lives remaining:"+String.valueOf(lives));    }
+        t2.setText("Lives remaining:" + String.valueOf(lives));
+        textViewResult = findViewById(R.id.textView8);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                //.baseUrl("http://jsonplaceholder.typicode.com/")
+                .baseUrl("http://10.0.2.2:5000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        jsonPlaceholderApi = retrofit.create(JsonPlaceholderApi.class);
+
+        }
 
 
     public void pressButton(View v){
@@ -143,6 +165,7 @@ public class GameActivity extends AppCompatActivity {
         if (status == 2) {
             b.setText("Exit to menu");
             status = 3;
+            createPost();
         }
         else if (status == 3) {
             finish();
@@ -283,11 +306,44 @@ public class GameActivity extends AppCompatActivity {
 
     public void loadHighScore(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        my_name = sharedPreferences.getString(NAME,"anonymous");
         high_score = sharedPreferences.getInt(HIGH_SCORE,0);
         // TextView t = findViewById(R.id.textView12);
         // t.setText("High score: "+String.valueOf(high_score));
 
         }
 
+    private void createPost(){
+        post post = new post(my_name,seqLength);
+
+
+        Call<post> call = jsonPlaceholderApi.createPost(post);
+        call.enqueue(new Callback<post>() {
+            @Override
+            public void onResponse(Call<post> call, Response<post> response) {
+                if (!response.isSuccessful()) {
+                    textViewResult.setText(response.code());
+                    return;
+                }
+                textViewResult.setText("");
+                post posts = response.body();
+
+                String content = "";
+                content += "SENT to HIGHSCORE:";
+                content += "name:" + posts.getName() + "        ";
+                content += "score: " + posts.getScore() + "\n";
+
+                textViewResult.append(content);
+
+
+            }
+
+            @Override
+            public void onFailure(Call<post> call, Throwable t) {
+                textViewResult.setText(t.getMessage());
+            }
+        });
+
+    }
 
 }

@@ -31,7 +31,8 @@ public class SettingsActivity extends AppCompatActivity {
                 .build();
 
         jsonPlaceholderApi = retrofit.create(JsonPlaceholderApi.class);
-        //getPost();
+
+        getPost();
         //createPost();
 
     }
