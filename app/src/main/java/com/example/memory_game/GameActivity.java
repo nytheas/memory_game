@@ -34,11 +34,25 @@ public class GameActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "SharedPrefs";
     public static final String HIGH_SCORE = "High score";
     public static final String NAME = "Name";
+    public static final String LOCAL_HIGHSCORE = "Local High score";
     private String my_name;
     private Integer high_score;
     private TextView textViewResult;
     private JsonPlaceholderApi jsonPlaceholderApi;
 
+    public static final String SCORE_1 = "First score";
+    public static final String SCORE_2 = "Second score";
+    public static final String SCORE_3 = "Third score";
+    public static final String NAME_1 = "First name";
+    public static final String NAME_2 = "Second name";
+    public static final String NAME_3 = "Third name";
+
+    private Integer score1;
+    private Integer score2;
+    private Integer score3;
+    private String name1;
+    private String name2;
+    private String name3;
 
 
 
@@ -69,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
                 .build();
 
         jsonPlaceholderApi = retrofit.create(JsonPlaceholderApi.class);
-
+        load_values();
         }
 
 
@@ -165,6 +179,7 @@ public class GameActivity extends AppCompatActivity {
         if (status == 2) {
             b.setText("Exit to menu");
             status = 3;
+            check_local_highscore();
             createPost();
         }
         else if (status == 3) {
@@ -343,6 +358,52 @@ public class GameActivity extends AppCompatActivity {
                 textViewResult.setText(t.getMessage());
             }
         });
+
+    }
+
+    public void load_values(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+
+        score1 = sharedPreferences.getInt(SCORE_1,5);
+        score2 = sharedPreferences.getInt(SCORE_2,4);
+        score3 = sharedPreferences.getInt(SCORE_3,3);
+        name1 = sharedPreferences.getString(NAME_1,"Karel");
+        name2 = sharedPreferences.getString(NAME_2,"Petr");
+        name3 = sharedPreferences.getString(NAME_3,"Milan");
+    }
+
+    public void check_local_highscore(){
+        if (seqLength > score1) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SCORE_3,score2);
+            editor.putInt(SCORE_2,score1);
+            editor.putInt(SCORE_1,seqLength);
+            editor.putString(NAME_3,name2);
+            editor.putString(NAME_2,name1);
+            editor.putString(NAME_1,my_name);
+            editor.apply();
+         }
+        else if (seqLength > score2) {
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SCORE_3,score2);
+            editor.putInt(SCORE_2,seqLength);
+            editor.putString(NAME_3,name2);
+            editor.putString(NAME_2,my_name);
+            editor.apply();
+
+        }
+        else if (seqLength > score3){
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(SCORE_3,seqLength);
+            editor.putString(NAME_3,my_name);
+            editor.apply();
+
+        }
+
+
 
     }
 

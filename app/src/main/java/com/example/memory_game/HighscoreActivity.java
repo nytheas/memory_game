@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public class HighscoreActivity extends AppCompatActivity {
 
@@ -21,12 +22,13 @@ public class HighscoreActivity extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscore);
-
-        loadHighScore();
+        //loadHighScore();
     }
 
     public void saveName(View v){
@@ -50,6 +52,7 @@ public class HighscoreActivity extends AppCompatActivity {
         r.setText(String.valueOf(my_name));
 
     }
+
 
 
 }

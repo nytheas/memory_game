@@ -3,10 +3,16 @@ package com.example.memory_game;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,4 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, GameActivity.class);
         startActivity(i);
     }
+
+
+
 }
